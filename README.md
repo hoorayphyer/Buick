@@ -4,7 +4,7 @@
 `buick` is a snippet to automate running `cmake` in a user-defined build directory to prevent the notorious cmake build cache files contamination.
 
 ## Install
-Download and `chmod` the script `buick`.
+Download and `chmod` the script `buick`. To make it system-wide available, just create an alias in your shell rc file.
 
 ## Usage
 1. `buick *path_to_CMakeLists* *cmake_commandline_arguments*` will creates `./build` and run `cmake *cmake_commandline_arguments*` in it. *path_to_CMakeLists* can be relative.
