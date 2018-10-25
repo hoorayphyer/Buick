@@ -22,8 +22,14 @@ LAST_CMAKE_CMD=3
 CURRENT_CMAKE_CMD="cmake"
 CURRENT_BUILD_DIR=${LINES[$BUILD_DIR]}
 
+# if there is no argments, simply build the targets
+# $@ catches everything except $0
+if [[ ! -n "$@" ]]; then
+    cd ${CURRENT_BUILD_DIR} && make
+    exit 0
+fi
+
 # check if --clean exists
-# $@ catches all command line arguments
 if echo "$@" | grep -q "\--clean"; then
     if [[ -d ${LINES[$BUILD_DIR]} ]]; then
         rm -rf ${LINES[$BUILD_DIR]}
@@ -37,7 +43,12 @@ for i in "$@"
 do
     case $i in
         --build-dir=*)
-            LINES[$BUILD_DIR]="${i#*=}"
+            dir="${PWD_DIR=}/${i#*=}"
+            read -p "Clean current build directory ${CURRENT_BUILD_DIR}? (Y/n) : " key
+            if [ "$key" != "n" ] && [ "$key" != "N" ]; then
+                rm -rf ${CURRENT_BUILD_DIR}
+            fi
+            LINES[$BUILD_DIR]=$dir
             ;;
         --no-buick-save-command-to-file)
             SAVE_FILE=""
@@ -54,9 +65,19 @@ do
     esac
 done
 
+# check if --last-cmake exists
+if echo "$@" | grep -q "\--last-cmake"; then
+    CURRENT_CMAKE_CMD=${LINES[$LAST_CMAKE_CMD]}
+fi
+
 ### use LAST_CMAKE_CMD when no CURRENT_CMAKE_CMD is provided
 if [ "cmake" == "$CURRENT_CMAKE_CMD" ]; then
-    CURRENT_CMAKE_CMD=${LINES[$LAST_CMAKE_CMD]}
+    read -p "No cmake arguments specified. Use Last_Cmake_Command? (Y/n) : " key
+    if [ "$key" == "n" ] || [ "$key" == "N" ]; then
+        exit 0
+    else
+        CURRENT_CMAKE_CMD=${LINES[$LAST_CMAKE_CMD]}
+    fi
 fi
 
 if [[ ! -d ${LINES[$BUILD_DIR]} ]]; then

@@ -7,10 +7,13 @@
 Download and `chmod` the script `buick`. To make it system-wide available, just create an alias in your shell rc file.
 
 ## Usage
-1. `buick *path_to_CMakeLists* *cmake_commandline_arguments*` will creates `./build` and run `cmake *cmake_commandline_arguments*` in it. *path_to_CMakeLists* can be relative.
+0. `buick` with no arguments will `cd` to the build directory and `make`.
+1. <pre>buick <i>path_to_CMakeLists</i> <i>cmake_commandline_arguments</i></pre> will create `./build` and run <pre>cmake <i>cmake_commandline_arguments</i></pre> in it. <i>path_to_CMakeLists</i> can be relative.
 2. The above command will create `./.buick` in which the build directory and last successful cmake command are cached.
-3. So next time `buick` will repeat step 1 automatically.
+3. `buick --last-cmake` runs the cached cmake command.
+3. <pre>buick --build-dir=<i>your_build_dir</i></pre> uses a different directory than the default `./build`.
 4. `buick --clean` will `rm -rf ` the cached build directory if it exists. Passing `--clean` will make `buick` ignore all other arguments.
 
 ## Caveats
-* Relative paths used in cmake commandline options may not be all supported
+* I only included gnu make. For other build tools, modify the script as needed.
+* Relative paths used in cmake commandline options may not be properly supported.
