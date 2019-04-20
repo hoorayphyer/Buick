@@ -11,7 +11,7 @@ if [[ -f $SAVE_FILE ]]; then
     done < ${SAVE_FILE} # redirect stdin for read
 else
     LINES+=("### BUILD_DIR")
-    LINES+=($PWD_DIR"/build")
+    LINES+=($PWD_DIR"/.build")
     LINES+=("### LAST_CMAKE_CMD")
     LINES+=("echo \"Last cmake command doesn't exist\"")
 fi
